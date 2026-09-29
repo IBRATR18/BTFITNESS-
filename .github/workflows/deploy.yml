@@ -1,0 +1,45 @@
+name: Deploy BTFITNESS
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+
+      - name: Preparar web
+        run: |
+          rm -rf _site _tmp
+          mkdir _site _tmp
+          unzip -q btfitness.zip -d _tmp
+          if [ -d "_tmp/btfitness" ]; then
+            cp -R _tmp/btfitness/. _site/
+          else
+            cp -R _tmp/. _site/
+          fi
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir web
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: "_site"
+
+      - name: Publicar web
+        id: deployment
+        uses: actions/deploy-pages@v4
