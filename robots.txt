@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /blog/plantilla-articulo/
+
+Sitemap: https://TU-DOMINIO.com/sitemap.xml
